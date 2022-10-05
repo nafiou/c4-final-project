@@ -6,15 +6,15 @@ const XAWS = AWSXRay.captureAWS(AWS)
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 const logger = createLogger('createTodo')
 
-const s3 = new XAWS.S3({
-    signatureVersion: 'v4'
-})
 // TODO: Implement the fileStogare logic
 
 export class AttachmentUtils {
 
     constructor(
-        private readonly docClient: DocumentClient = createDynamoDBClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
+        private readonly s3 = new XAWS.S3({
+            signatureVersion: 'v4'
+        }),
         private readonly todosTable = process.env.TODOS_TABLE,
         private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET
     ) {
@@ -45,21 +45,9 @@ export class AttachmentUtils {
 
 
 function getUploadUrl(todoId: string, bucketName: string): string {
-return s3.getSignedUrl('putObject', {
+return this.s3.getSignedUrl('putObject', {
     Bucket: bucketName,
     Key: todoId,
     Expires: parseInt(urlExpiration)
 })
-}
-
-function createDynamoDBClient() {
-    if (process.env.IS_OFFLINE) {
-        console.log('Creating a local DynamoDB instance')
-        return new XAWS.DynamoDB.DocumentClient({
-            region: 'localhost',
-            endpoint: 'http://localhost:8000'
-        })
-    }
-
-    return new XAWS.DynamoDB.DocumentClient()
 }

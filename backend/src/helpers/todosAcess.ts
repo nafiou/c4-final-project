@@ -14,7 +14,7 @@ const logger = createLogger('TodosAccess')
 export class TodosAccess {
 
     constructor(
-        private readonly docClient: DocumentClient = createDynamoDBClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todosTable = process.env.TODOS_TABLE
     ) {
     }
@@ -87,18 +87,4 @@ export class TodosAccess {
         return ''
 
     }
-}
-
-
-
-function createDynamoDBClient() {
-    if (process.env.IS_OFFLINE) {
-        console.log('Creating a local DynamoDB instance')
-        return new XAWS.DynamoDB.DocumentClient({
-            region: 'localhost',
-            endpoint: 'http://localhost:8000'
-        })
-    }
-
-    return new XAWS.DynamoDB.DocumentClient()
 }
