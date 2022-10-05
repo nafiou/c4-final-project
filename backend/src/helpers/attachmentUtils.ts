@@ -20,7 +20,7 @@ export class AttachmentUtils {
     ) {
     }
     async  generateUploadUrl(userId: string, todoId: string): Promise<String> {
-        const url = getUploadUrl(todoId, this.bucketName)
+        const url = this.getUploadUrl(todoId, this.bucketName)
     
         const attachmentUrl: string = 'https://' + this.bucketName + '.s3.amazonaws.com/' + todoId
     
@@ -41,13 +41,12 @@ export class AttachmentUtils {
         logger.info("Presigned url generated successfully ", url)
         return url;
     }
-}
 
-
-function getUploadUrl(todoId: string, bucketName: string): string {
-return this.s3.getSignedUrl('putObject', {
-    Bucket: bucketName,
-    Key: todoId,
-    Expires: parseInt(urlExpiration)
-})
+    getUploadUrl(todoId: string, bucketName: string): string {
+        return this.s3.getSignedUrl('putObject', {
+            Bucket: bucketName,
+            Key: todoId,
+            Expires: parseInt(urlExpiration)
+        })
+    }
 }

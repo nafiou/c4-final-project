@@ -9,11 +9,15 @@
     },
     "dueDate": {
       "type": "string"
+    },
+    "sget": {
+      "type": "string"
     }
   },
   "required": [
     "name",
-    "dueDate"
+    "dueDate",
+    "sget"
   ],
   "additionalProperties": false
 }
