@@ -7,6 +7,8 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+  - serverless-aws-documentation
+  - serverless-reqvalidator-plugin
 
 provider:
   name: aws
@@ -81,6 +83,7 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -178,6 +181,7 @@ functions:
           method: delete
           path: todos/{todoId}
           authorizer: Auth
+          reqValidatorName: RequestBodyValidator
           cors: true
     iamRoleStatements:
       - Effect: Allow
@@ -203,6 +207,7 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
+          reqValidatorName: RequestBodyValidator
           cors: true
     iamRoleStatements:
       - Effect: Allow

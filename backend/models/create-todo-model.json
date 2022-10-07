@@ -5,19 +5,15 @@
   "properties": {
     "name": {
       "type": "string",
-      "minLength": 4
+      "minLength": 1
     },
     "dueDate": {
-      "type": "string"
-    },
-    "sget": {
       "type": "string"
     }
   },
   "required": [
     "name",
-    "dueDate",
-    "sget"
+    "dueDate"
   ],
   "additionalProperties": false
 }
